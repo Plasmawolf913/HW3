@@ -5,14 +5,26 @@ package edu.iastate.cs2280.hw2;
 
 public class InsertionSorter extends AbstractSorter {
 
+
 	protected InsertionSorter(Student[] students) throws IllegalArgumentException {
 		super(students);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
 	public void sort() {
-		// TODO Auto-generated method stub
+		for (int i = 1; i < students.length; i++) {
+	        Student key = students[i];
+	        int j = i - 1;
+
+	        // Move elements that are "less" than key (based on compareTo)
+	        // so that we maintain the correct order
+	        while (j >= 0 && students[j].compareTo(key) > 0) {
+	            students[j + 1] = students[j];
+	            j--;
+	        }
+	        students[j + 1] = key;
+	    }
 		
 	}
 
