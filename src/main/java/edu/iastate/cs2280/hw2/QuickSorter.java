@@ -1,5 +1,5 @@
 /**
- * @author
+ * @author tfolkers
  */
 package edu.iastate.cs2280.hw2;
 
@@ -9,6 +9,11 @@ package edu.iastate.cs2280.hw2;
  * avoid worst-case scenarios with already sorted or reverse-sorted data.
  */
 public class QuickSorter extends AbstractSorter {
+
+  protected QuickSorter(Student[] students) throws IllegalArgumentException {
+		super(students);
+		// TODO Auto-generated constructor stub
+	}
 
   /**
    * Selects a pivot using the median-of-three strategy. It considers the first,
@@ -20,5 +25,11 @@ public class QuickSorter extends AbstractSorter {
    * @param last  The ending index of the subarray.
    */
   private void medianOfThree(int first, int last) {
+  }
+
+  @Override
+  public void sort() {
+	// TODO Auto-generated method stub
+	
   }
 }

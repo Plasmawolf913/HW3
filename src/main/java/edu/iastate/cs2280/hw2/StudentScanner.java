@@ -1,5 +1,5 @@
 /**
- * @author
+ * @author tfolkers
  */
 package edu.iastate.cs2280.hw2;
 

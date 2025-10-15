@@ -1,5 +1,5 @@
 /**
- * @author
+ * @author tfolkers
  */
 package edu.iastate.cs2280.hw2;
 
@@ -27,6 +27,8 @@ public class Student implements Comparable<Student> {
    * @throws IllegalArgumentException if GPA or creditsTaken are out of valid range.
    */
   public Student(double gpa, int creditsTaken) {
+	  this.gpa = gpa;
+	  this.creditsTaken = creditsTaken;
   }
 
   /**
@@ -35,6 +37,8 @@ public class Student implements Comparable<Student> {
    * @param other The Student object to copy.
    */
   public Student(Student other) {
+	  this.gpa = other.gpa;
+	  this.creditsTaken = other.creditsTaken;
   }
 
   /**
@@ -89,5 +93,14 @@ public class Student implements Comparable<Student> {
    */
   @Override
   public boolean equals(Object other) {
+	  if(other == null || this.getClass() != other.getClass()) {
+		  return false;
+	  }
+	  Student o = (Student) other;
+	  if(this.gpa != o.gpa || this.creditsTaken != o.creditsTaken) {
+		  return false;
+	  }
+	  return true;
+	  
   }
 }
