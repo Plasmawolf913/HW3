@@ -81,5 +81,24 @@ public class CompareSorters {
    * (e.g., non-numeric data, empty file).
    */
   private static Student[] readStudentsFromFile(String filename) throws FileNotFoundException, InputMismatchException {
+	  
+	  int size = 0;
+	  Scanner counter = new Scanner(filename);
+	  while(counter.hasNext()) {
+		  String[] parts = counter.nextLine().split(" ");
+		  size += parts.length;
+	  }
+	  Scanner scnr = new Scanner(filename);
+	  int i = 0;
+	  Student[] students = new Student[size/2];
+	  
+	  while(scnr.hasNextLine()) {
+		  String[] parts = scnr.nextLine().split(" ");
+		  double gpa = Double.parseDouble(parts[0]);
+		  int creditsTaken = Integer.parseInt(parts[1]);
+		  students[i] = new Student(gpa, creditsTaken);
+	  }
+	  
+	  return students;
   }
 }
