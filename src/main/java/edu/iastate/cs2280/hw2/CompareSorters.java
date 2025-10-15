@@ -59,6 +59,15 @@ public class CompareSorters {
    * @throws IllegalArgumentException if numStudents is less than 1.
    */
   public static Student[] generateRandomStudents(int numStudents, Random rand) {
+	  if(numStudents < 1) {
+		  throw new IllegalArgumentException("NumStudents cannot be less than 1");
+	  }
+	  
+	  Student[] students = new Student[numStudents];
+	  for(int i = 0; i < numStudents; i++) {
+		  students[i] = new Student(rand.nextDouble() % 4, rand.nextInt());
+	  }
+	  return students;
   }
 
   /**

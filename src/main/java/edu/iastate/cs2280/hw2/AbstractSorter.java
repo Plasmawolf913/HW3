@@ -60,6 +60,7 @@ public abstract class AbstractSorter {
    * @return The median student.
    */
   public Student getMedian() {
+	  return students[students.length/2];
   }
 
   /**

@@ -27,6 +27,9 @@ public class Student implements Comparable<Student> {
    * @throws IllegalArgumentException if GPA or creditsTaken are out of valid range.
    */
   public Student(double gpa, int creditsTaken) {
+	  if(gpa < 0.0 || gpa > 4.0 || creditsTaken < 0 ) {
+		  throw new IllegalArgumentException("gpa or creditsTaken is out of range");
+	  }
 	  this.gpa = gpa;
 	  this.creditsTaken = creditsTaken;
   }
