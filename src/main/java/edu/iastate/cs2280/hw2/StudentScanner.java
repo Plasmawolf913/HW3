@@ -28,6 +28,9 @@ public class StudentScanner {
    * The resulting student object with median GPA and median credits.
    */
   private Student medianStudent;
+  
+  //need this???? or use other students
+  private Student[] copy; 
 
   /**
    * Constructs a StudentScanner. It takes an array of students and the sorting
@@ -39,6 +42,20 @@ public class StudentScanner {
    * @throws IllegalArgumentException if the input students array is null or empty.
    */
   public StudentScanner(Student[] students, Algorithm algo) {
+	  if(students == null || students.length < 1) {
+		  throw new IllegalArgumentException("Student array must have at least 1 value");
+	  }
+	  
+	  this.students = new Student[students.length];
+	  this.sortingAlgorithm = algo;
+	  this.copy = new Student[students.length];
+	  
+	  for(int i = 0; i < students.length; i++) {
+		  this.copy[i] = students[i];
+	  }
+	  
+	  
+
   }
 
   /**
@@ -48,6 +65,7 @@ public class StudentScanner {
    * time and creates the medianStudent.
    */
   public void scan() {
+	  
   }
 
   /**
