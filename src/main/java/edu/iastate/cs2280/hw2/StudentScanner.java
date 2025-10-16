@@ -120,4 +120,16 @@ public class StudentScanner {
   public String toString() {
     return "Median Student: " + medianStudent.toString();
   }
+
+  public Object getAlgorithm() {
+	return sortingAlgorithm;
+  }
+
+  public Object getSize() {
+	return students.length;
+  }
+
+  public Object getScanTime() {
+	return scanTime;
+  }
 }

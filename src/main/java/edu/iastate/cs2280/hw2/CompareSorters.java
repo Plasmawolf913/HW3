@@ -74,6 +74,40 @@ public class CompareSorters {
    * @param scanners An array of StudentScanner objects containing the performance stats.
    */
   private static void handleExportOption(Scanner scan, StudentScanner[] scanners) {
+	  System.out.print("Export results to CSV? (y/n): ");
+	    String choice = scan.nextLine().trim().toLowerCase();
+
+	    if (!choice.equals("y")) {
+	        return; 
+	    }
+
+	    System.out.print("Enter filename for export (e.g., results.csv): ");
+	    String filename = scan.nextLine().trim();
+
+	    try (PrintWriter writer = new PrintWriter(filename)) {
+	        // CSV header
+	        writer.println("algorithm,size,time(ns)");
+
+	        // Write each sorter’s performance row
+	        for (StudentScanner s : scanners) {
+	            writer.printf("%s,%d,%d%n",
+	                    s.getAlgorithm(),
+	                    s.getSize(),
+	                    s.getScanTime());
+	        }
+
+	        // Median student profile
+	        Student median = scanners[0].getMedianStudent();
+	        writer.printf("Median Student,%.2f,%d%n",
+	                median.getGpa(),
+	                median.getCreditsTaken());
+
+	        System.out.printf("Data exported successfully to %s%n", filename);
+
+	    } catch(Exception e) {
+	    	System.out.printf("Error: Could not create or write to file %s%n", filename);
+	    }
+	  
   }
 
   /**
