@@ -34,22 +34,32 @@ public class CompareSorters {
     Scanner scan = new Scanner(System.in);
 
     int choice = 0;
+    
     try {
     	choice = scan.nextInt();
     }catch(Exception e) {
     	System.out.println("Please enter a value 1-3");
     }
+    
     switch(choice) {
     	case 1:
+    		
+    		System.out.println("Enter the number of students to generate:");
+    		int numStudents = scan.nextInt();
+    		Random rand = new Random();
+    		generateRandomStudents(numStudents, rand);
+    		
     		break;
     	case 2:
     		break;
     	case 3:
     		break;
     	default:
-    		System.out.println("Please input a number");
+    		System.out.println("Please input a number 1-3");
     
     }
+    
+    //while loop!!! prob
 
     System.out.println("Exiting program.");
     scan.close();
@@ -81,7 +91,7 @@ public class CompareSorters {
 	  
 	  Student[] students = new Student[numStudents];
 	  for(int i = 0; i < numStudents; i++) {
-		  students[i] = new Student(rand.nextDouble() % 4, rand.nextInt());
+		  students[i] = new Student(rand.nextDouble(4.1), rand.nextInt(131));
 	  }
 	  return students;
   }
