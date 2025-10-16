@@ -29,8 +29,6 @@ public class StudentScanner {
    */
   private Student medianStudent;
   
-  //need this???? or use other students
-  private Student[] copy; 
 
   /**
    * Constructs a StudentScanner. It takes an array of students and the sorting
@@ -48,10 +46,9 @@ public class StudentScanner {
 	  
 	  this.students = new Student[students.length];
 	  this.sortingAlgorithm = algo;
-	  this.copy = new Student[students.length];
 	  
 	  for(int i = 0; i < students.length; i++) {
-		  this.copy[i] = students[i];
+		  this.students[i] = students[i];
 	  }
 	  
 	  
@@ -65,7 +62,35 @@ public class StudentScanner {
    * time and creates the medianStudent.
    */
   public void scan() {
-	  
+	  long start = System.nanoTime();
+
+      // 1) Make a sorter instance with a fresh deep copy (handled by AbstractSorter)
+      AbstractSorter sorter = switch (sortingAlgorithm) {
+          case SelectionSort -> new SelectionSorter(students);
+          case InsertionSort -> new InsertionSorter(students);
+          case MergeSort     -> new MergeSorter(students);
+          case QuickSort     -> new QuickSorter(students);
+      };
+
+      // Pass A: Order 0 (by GPA desc, tie credits desc)
+      sorter.setComparator(0);
+      sorter.sort();
+      double medianGpa = sorter.getMedian().getGpa();
+
+      // Pass B: Order 1 (by credits asc, tie GPA desc)
+      // Make a new sorter to avoid in-place side-effects OR reuse but re-copy students yourself.
+      sorter = switch (sortingAlgorithm) {
+          case SelectionSort -> new SelectionSorter(students);
+          case InsertionSort -> new InsertionSorter(students);
+          case MergeSort     -> new MergeSorter(students);
+          case QuickSort     -> new QuickSorter(students);
+      };
+      sorter.setComparator(1);
+      sorter.sort();
+      int medianCredits = sorter.getMedian().getCreditsTaken();
+
+      medianStudent = new Student(medianGpa, medianCredits);
+      scanTime = System.nanoTime() - start;
   }
 
   /**
@@ -83,6 +108,7 @@ public class StudentScanner {
    * @return The median student.
    */
   public Student getMedianStudent() {
+	  return medianStudent;
   }
 
   /**

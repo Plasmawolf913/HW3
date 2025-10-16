@@ -33,7 +33,23 @@ public class CompareSorters {
     System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
     Scanner scan = new Scanner(System.in);
 
-    // Write your logic here
+    int choice = 0;
+    try {
+    	choice = scan.nextInt();
+    }catch(Exception e) {
+    	System.out.println("Please enter a value 1-3");
+    }
+    switch(choice) {
+    	case 1:
+    		break;
+    	case 2:
+    		break;
+    	case 3:
+    		break;
+    	default:
+    		System.out.println("Please input a number");
+    
+    }
 
     System.out.println("Exiting program.");
     scan.close();

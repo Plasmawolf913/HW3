@@ -19,7 +19,7 @@ public class InsertionSorter extends AbstractSorter {
 
 	        // Move elements that are "less" than key (based on compareTo)
 	        // so that we maintain the correct order
-	        while (j >= 0 && students[j].compareTo(key) > 0) {
+	        while (j >= 0 && studentComparator.compare(key, students[j]) > 0) {
 	            students[j + 1] = students[j];
 	            j--;
 	        }

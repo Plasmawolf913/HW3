@@ -28,74 +28,75 @@ public class QuickSorter extends AbstractSorter {
 	   * @param last  The ending index of the subarray.
 	   */
 	  private void medianOfThree(int first, int last) {
-		  
-		int middle = (first + last) / 2;
-	
-	    // Order the first, middle, and last elements
-	    if (students[middle].compareTo(students[first]) < 0) {
-	        swap(students, first, middle);
-	    }
-	    if (students[last].compareTo(students[first]) < 0) {
-	        swap(students, first, last);
-	    }
-	    if (students[last].compareTo(students[middle]) < 0) {
-	        swap(students, middle, last);
-	    }
-	
-	    // Move the median element (currently at middle) to position last - 1
-	    swap(students, middle, last - 1);
-	}
+		    int middle = (first + last) / 2;
 
-	private static void swap(Student[] students, int i, int j) {
-	    Student temp = students[i];
-	    students[i] = students[j];
-	    students[j] = temp;
-	}
+		    // order first, middle, last under the current comparator
+		    if (studentComparator.compare(students[middle], students[first]) < 0) {
+		        swap(first, middle);
+		    }
+		    if (studentComparator.compare(students[last], students[first]) < 0) {
+		        swap(first, last);
+		    }
+		    if (studentComparator.compare(students[last], students[middle]) < 0) {
+		        swap(middle, last);
+		    }
+
+		    // move median (currently at middle) to last - 1 for partition
+		    swap(middle, last - 1);
+		}
+	  
+
 
   
 
-  @Override
-  public void sort() {
-	  
-	  if (first >= last) return;
+	@Override
+	public void sort() {
+	    if (first >= last) return;
 
-      int localFirst = first;
-      int localLast = last;
+	    int localFirst = first;
+	    int localLast  = last;
 
-      if (localLast - localFirst + 1 >= 3) {
-          medianOfThree(localFirst, localLast);
-          Student pivot = students[localLast - 1];
+	    if (localLast - localFirst + 1 >= 3) {
+	        medianOfThree(localFirst, localLast);
+	        Student pivot = students[localLast - 1];     // median moved here
 
-          int i = localFirst;
-          int j = localLast - 2;
+	        int i = localFirst;
+	        int j = localLast - 2;
 
-          while (true) {
-              while (++i <= localLast - 2 && students[i].compareTo(pivot) < 0) {}
-              while (--j >= localFirst && students[j].compareTo(pivot) > 0) {}
-              if (i >= j) break;
-              swap(i, j);
-          }
+	        while (true) {
+	            while (++i <= localLast - 2 &&
+	                   studentComparator.compare(students[i], pivot) < 0) { /* advance i */ }
 
-          swap(i, localLast - 1);
+	            while (--j >= localFirst &&
+	                   studentComparator.compare(students[j], pivot) > 0) { /* advance j */ }
 
-          // recurse on left side
-          first = localFirst;
-          last = i - 1;
-          sort();
+	            if (i >= j) break;
+	            swap(i, j);
+	        }
 
-          // recurse on right side
-          first = i + 1;
-          last = localLast;
-          sort();
+	        swap(i, localLast - 1); // restore pivot to its final place
 
-          // restore
-          first = localFirst;
-          last = localLast;
-      } else {
-          if (localFirst < localLast && students[localLast].compareTo(students[localFirst]) < 0) {
-              swap(localFirst, localLast);
-          }
-      }
-  }
+	        // recurse left
+	        first = localFirst;
+	        last  = i - 1;
+	        sort();
+
+	        // recurse right
+	        first = i + 1;
+	        last  = localLast;
+	        sort();
+
+	        // restore fields
+	        first = localFirst;
+	        last  = localLast;
+	    } else {
+	        // small array of size 2: order under the current comparator
+	        if (localFirst < localLast &&
+	            studentComparator.compare(students[localLast], students[localFirst]) < 0) {
+	            swap(localFirst, localLast);
+	        }
+	    }
+	}
+
+	
 }
-

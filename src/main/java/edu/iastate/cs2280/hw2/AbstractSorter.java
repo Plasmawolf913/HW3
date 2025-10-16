@@ -26,6 +26,7 @@ public abstract class AbstractSorter {
    * The comparator used to define the sorting order for students.
    */
   protected Comparator<Student> studentComparator = null;
+  
 
   /**
    * This constructor accepts an array of students as input. It creates a deep copy
@@ -35,6 +36,14 @@ public abstract class AbstractSorter {
    * @throws IllegalArgumentException if students is null or its length is 0.
    */
   protected AbstractSorter(Student[] students) throws IllegalArgumentException {
+	  if(students == null || students.length <= 0) {
+		  throw new IllegalArgumentException("Students must have at least one value");
+	  }
+	  this.students = new Student[students.length];
+	  for(int i = 0; i < students.length; i++) {
+		  this.students[i] = students[i];
+	  }
+	  
   }
 
   /**
@@ -46,6 +55,25 @@ public abstract class AbstractSorter {
    * @throws IllegalArgumentException if order is not 0 or 1.
    */
   public void setComparator(int order) throws IllegalArgumentException {
+	  
+	  switch (order) {
+      case 0: // Order 0 (by GPA desc, tie credits desc)
+          studentComparator = (a, b) -> {
+              int c = Double.compare(b.getGpa(), a.getGpa());          
+              if (c != 0) return c;
+              return Integer.compare(b.getCreditsTaken(), a.getCreditsTaken()); 
+          };
+          break;
+      case 1: // Order 1 (by credits asc, tie GPA desc)
+          studentComparator = (a, b) -> {
+              int c = Integer.compare(a.getCreditsTaken(), b.getCreditsTaken()); 
+              if (c != 0) return c;
+              return Double.compare(b.getGpa(), a.getGpa());                      
+          };
+          break;
+      default:
+          throw new IllegalArgumentException("Unknown order: " + order);
+  }
   }
 
   /**

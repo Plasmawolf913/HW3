@@ -19,7 +19,7 @@ public class SelectionSorter extends AbstractSorter{
 
 	        // Find the smallest element (based on compareTo)
 	        for (int j = i + 1; j < n; j++) {
-	            if (students[j].compareTo(students[minIndex]) < 0) {
+	            if (studentComparator.compare(students[j], students[minIndex]) < 0) {
 	                minIndex = j;
 	            }
 	        }
