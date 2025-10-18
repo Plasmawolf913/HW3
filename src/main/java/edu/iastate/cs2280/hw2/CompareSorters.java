@@ -90,19 +90,22 @@ public class CompareSorters {
 	    		
 	    		
 	    	case 2:
-	    		System.out.println("File name: ");
-	    		String fileName = scan.nextLine();
+	    		System.out.print("File name: ");
+	    		String fileName = scan.next().trim();   // single token is safest for filenames
+	    		scan.nextLine();   
 	    		
-				Student[] fileStudents = null;
+				Student[] fileStudents;
+				
 				try {
 					fileStudents = readStudentsFromFile(fileName);
-				} catch (InputMismatchException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+					System.out.println("File not found: " + fileName);
+				    return; // stop here; don't proceed with null
+				} catch (InputMismatchException e) {
+					System.out.println("File format error: " + e.getMessage());
+				    return;
+				} 
+				
 	    		
 	    		StudentScanner[] fileScanners = {
 	    		        new StudentScanner(fileStudents, Algorithm.SelectionSort),
@@ -123,11 +126,12 @@ public class CompareSorters {
     		    System.out.print("Export results to CSV? (y/n): ");
     		    String fileCsvChoice = scan.next();
 
-    		    if (fileCsvChoice.equals("y")) {
+    		    if (fileCsvChoice.equalsIgnoreCase("y")) {
     		    	handleExportOption(scan, fileScanners); 
     		    }
 	    		break;
 	    	case 3:
+	    		quit = true;
 	    		break;
 	    	default:
 	    		System.out.println("Please input a number 1-3");
@@ -175,7 +179,7 @@ public class CompareSorters {
 	  
 
 	    System.out.print("Enter filename for export (e.g., results.csv): ");
-	    String filename = scan.nextLine().trim();
+	    String filename = scan.next().trim();
 
 	    try (PrintWriter writer = new PrintWriter(filename)) {
 	        // CSV header
@@ -237,29 +241,44 @@ public class CompareSorters {
 	  
 	  int size = 0;
 	  Student[] students = null;
-	  try {
-		  Scanner counter = new Scanner(filename);
-		  
-		  while(counter.hasNext()) {
-			  String[] parts = counter.nextLine().split(" ");
-			  size += parts.length;
-		  }
-		  Scanner scnr = new Scanner(filename);
-		  int i = 0;
-		  students = new Student[size/2];
-		  
-		  while(scnr.hasNextLine()) {
-			  String[] parts = scnr.nextLine().split(" ");
-			  double gpa = Double.parseDouble(parts[0]);
-			  int creditsTaken = Integer.parseInt(parts[1]);
-			  students[i] = new Student(gpa, creditsTaken);
-		  }
-	  }catch(InputMismatchException e) {
-		  System.out.println("File was not found or input was wrong");
-	  }
 	  
+	  File f = new File(filename);
+	  if (!f.exists()) {
+	        throw new FileNotFoundException("File not found: " + filename);
+	   }
 	  
-	  return students;
+	  ArrayList<Student> list = new ArrayList<>();
+
+	    
+	  try (Scanner sc = new Scanner(f)) {
+	        int lineNo = 0;
+	        while (sc.hasNextLine()) {
+	            lineNo++;
+	            String line = sc.nextLine().trim();
+	            if (line.isEmpty() || line.startsWith("#")) continue; // allow blanks/comments
+
+	            String[] parts = line.split("\\s+");
+	            if (parts.length < 2) {
+	                throw new InputMismatchException("Line " + lineNo + " must contain GPA and credits");
+	            }
+
+	            double gpa;
+	            int credits;
+	            try {
+	                gpa = Double.parseDouble(parts[0]);
+	                credits = Integer.parseInt(parts[1]);
+	            } catch (NumberFormatException nfe) {
+	                throw new InputMismatchException("Invalid number on line " + lineNo + ": " + nfe.getMessage());
+	            }
+
+	            list.add(new Student(gpa, credits));
+	        }
+	    }
+
+	    if (list.isEmpty()) {
+	        throw new IllegalArgumentException("student array must have at least 1 value");
+	    }
+	    return list.toArray(new Student[0]);
   }
   
   
