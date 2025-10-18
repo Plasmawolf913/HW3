@@ -30,39 +30,137 @@ public class CompareSorters {
    */
   public static void main(String[] args) {
     System.out.println("Sorting Algorithms Performance Analysis using Student Data\n");
-    System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
+    
     Scanner scan = new Scanner(System.in);
 
     int choice = 0;
+    int trialNum = 1;
+    boolean quit = false;
+    String choiceTwo = null;
     
-    try {
-    	choice = scan.nextInt();
-    }catch(Exception e) {
-    	System.out.println("Please enter a value 1-3");
+    while(!quit) {
+    	System.out.println();
+    	System.out.println("-----------------------------------------------------------");
+    	System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
+    
+	    try {
+	    	choice = scan.nextInt();
+	    }catch(Exception e) {
+	    	System.out.println("Please enter a value 1-3");
+	    }
+	    
+    	System.out.println("Trial " + trialNum + ": " + choice);
+
+	    
+	    switch(choice) {
+	    	case 1:
+	    		
+	    		System.out.println("Enter the number of students to generate:");
+	    		int numStudents = scan.nextInt();
+	    		Random rand = new Random();
+	    		Student[] randomStudents = generateRandomStudents(numStudents, rand);
+	    		
+	    		StudentScanner[] randomScanners = {
+	    		        new StudentScanner(randomStudents, Algorithm.SelectionSort),
+	    		        new StudentScanner(randomStudents, Algorithm.InsertionSort),
+	    		        new StudentScanner(randomStudents, Algorithm.QuickSort),
+	    		        new StudentScanner(randomStudents, Algorithm.MergeSort)
+	    		    };
+	    		
+	    		for (StudentScanner s : randomScanners) {
+	    			s.scan();
+	    		}
+
+    		    // Find median student
+    		    Student randomMedian = randomScanners[0].getMedianStudent();
+    		    
+    		    displayResults(randomScanners, randomMedian);
+
+    		
+    		    System.out.print("Export results to CSV? (y/n): ");
+    		    String randomCsvChoice = scan.next();
+
+    		    if (randomCsvChoice.equals("y")) {
+    		    	handleExportOption(scan, randomScanners); 
+    		    }
+	    		break;
+	    		
+	    		
+	    		
+	    		
+	    		
+	    	case 2:
+	    		System.out.println("File name: ");
+	    		String fileName = scan.nextLine();
+	    		
+				Student[] fileStudents = null;
+				try {
+					fileStudents = readStudentsFromFile(fileName);
+				} catch (InputMismatchException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    		
+	    		StudentScanner[] fileScanners = {
+	    		        new StudentScanner(fileStudents, Algorithm.SelectionSort),
+	    		        new StudentScanner(fileStudents, Algorithm.InsertionSort),
+	    		        new StudentScanner(fileStudents, Algorithm.QuickSort),
+	    		        new StudentScanner(fileStudents, Algorithm.MergeSort)
+	    		    };
+	    		
+	    		for (StudentScanner s : fileScanners) {
+	    			s.scan();
+	    		}
+	    		
+	    		Student fileMedian = fileScanners[0].getMedianStudent();
+    		    
+    		    displayResults(fileScanners, fileMedian);
+
+    		
+    		    System.out.print("Export results to CSV? (y/n): ");
+    		    String fileCsvChoice = scan.next();
+
+    		    if (fileCsvChoice.equals("y")) {
+    		    	handleExportOption(scan, fileScanners); 
+    		    }
+	    		break;
+	    	case 3:
+	    		break;
+	    	default:
+	    		System.out.println("Please input a number 1-3");
+	    
+	    }
+	    
+	    System.out.println("Would you like to re run the program or quit? (r or q)");
+	    try {
+	    	choiceTwo = scan.next();
+	    }catch(Exception e) {
+	    	System.out.println("Please enter a valid value");
+	    }
+	    switch(choiceTwo) {
+	    	case "r":
+	    		trialNum++;
+	    		continue;
+	    		
+	    	case "q":
+	    		quit = true;
+	    		break;
+	    	default:
+	    		quit = true;
+	    		break;
+	    }
     }
     
-    switch(choice) {
-    	case 1:
-    		
-    		System.out.println("Enter the number of students to generate:");
-    		int numStudents = scan.nextInt();
-    		Random rand = new Random();
-    		generateRandomStudents(numStudents, rand);
-    		
-    		break;
-    	case 2:
-    		break;
-    	case 3:
-    		break;
-    	default:
-    		System.out.println("Please input a number 1-3");
     
-    }
-    
-    //while loop!!! prob
 
     System.out.println("Exiting program.");
+    
     scan.close();
+    System.exit(0);
+   
   }
 
   /**
@@ -74,12 +172,7 @@ public class CompareSorters {
    * @param scanners An array of StudentScanner objects containing the performance stats.
    */
   private static void handleExportOption(Scanner scan, StudentScanner[] scanners) {
-	  System.out.print("Export results to CSV? (y/n): ");
-	    String choice = scan.nextLine().trim().toLowerCase();
-
-	    if (!choice.equals("y")) {
-	        return; 
-	    }
+	  
 
 	    System.out.print("Enter filename for export (e.g., results.csv): ");
 	    String filename = scan.nextLine().trim();
@@ -125,7 +218,7 @@ public class CompareSorters {
 	  
 	  Student[] students = new Student[numStudents];
 	  for(int i = 0; i < numStudents; i++) {
-		  students[i] = new Student(rand.nextDouble(4.1), rand.nextInt(131));
+		  students[i] = new Student(rand.nextDouble()*4, rand.nextInt(131));
 	  }
 	  return students;
   }
@@ -143,22 +236,61 @@ public class CompareSorters {
   private static Student[] readStudentsFromFile(String filename) throws FileNotFoundException, InputMismatchException {
 	  
 	  int size = 0;
-	  Scanner counter = new Scanner(filename);
-	  while(counter.hasNext()) {
-		  String[] parts = counter.nextLine().split(" ");
-		  size += parts.length;
+	  Student[] students = null;
+	  try {
+		  Scanner counter = new Scanner(filename);
+		  
+		  while(counter.hasNext()) {
+			  String[] parts = counter.nextLine().split(" ");
+			  size += parts.length;
+		  }
+		  Scanner scnr = new Scanner(filename);
+		  int i = 0;
+		  students = new Student[size/2];
+		  
+		  while(scnr.hasNextLine()) {
+			  String[] parts = scnr.nextLine().split(" ");
+			  double gpa = Double.parseDouble(parts[0]);
+			  int creditsTaken = Integer.parseInt(parts[1]);
+			  students[i] = new Student(gpa, creditsTaken);
+		  }
+	  }catch(InputMismatchException e) {
+		  System.out.println("File was not found or input was wrong");
 	  }
-	  Scanner scnr = new Scanner(filename);
-	  int i = 0;
-	  Student[] students = new Student[size/2];
 	  
-	  while(scnr.hasNextLine()) {
-		  String[] parts = scnr.nextLine().split(" ");
-		  double gpa = Double.parseDouble(parts[0]);
-		  int creditsTaken = Integer.parseInt(parts[1]);
-		  students[i] = new Student(gpa, creditsTaken);
-	  }
 	  
 	  return students;
   }
+  
+  
+  
+  
+  /**
+   * Displays the sorting performance table for all algorithms.
+   * Assumes each StudentScanner object stores algorithm name, input size, and runtime.
+   */
+  private static void displayResults(StudentScanner[] scanners, Student medianStudent) {
+      System.out.println();
+      System.out.println("algorithm\t\tsize\ttime (ns)");
+      System.out.println("--------------------------------------------");
+
+      // Loop through scanners and print each algorithm’s results
+      for (StudentScanner s : scanners) {
+          System.out.printf("%-15s %8d %12d%n",
+                  s.getAlgorithm(),
+                  s.getSize(),
+                  s.getScanTime());
+      }
+
+      System.out.println("--------------------------------------------");
+      System.out.println();
+
+      // Median student info
+      System.out.printf("Median Student Profile: (GPA: %.2f, Credits: %d)%n",
+              medianStudent.getGpa(),
+              medianStudent.getCreditsTaken());
+      System.out.println();
+
+  }
+
 }
