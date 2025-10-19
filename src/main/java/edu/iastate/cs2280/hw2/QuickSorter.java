@@ -10,8 +10,14 @@ package edu.iastate.cs2280.hw2;
  */
 public class QuickSorter extends AbstractSorter {
 
+	
       private int first;
       private int last;
+      /**
+       * 
+       * @param students array
+       * @throws IllegalArgumentException
+       */
 	  protected QuickSorter(Student[] students) throws IllegalArgumentException {
 			super(students);
 			first = 0;
@@ -21,82 +27,69 @@ public class QuickSorter extends AbstractSorter {
 	  /**
 	   * Selects a pivot using the median-of-three strategy. It considers the first,
 	   * middle, and last elements of the subarray, sorts them, and uses the median
-	   * as the pivot. The pivot is swapped to the second-to-last position (last - 1)
-	   * to simplify the partition step.
+	   * as the pivot. The pivot is swapped to the last position (last) to simplify
+	   * the partition step.
 	   *
 	   * @param first The starting index of the subarray.
 	   * @param last  The ending index of the subarray.
 	   */
 	  private void medianOfThree(int first, int last) {
-		    int middle = (first + last) / 2;
+	      int middle = (first + last) / 2;
 
-		    // order first, middle, last under the current comparator
-		    if (studentComparator.compare(students[middle], students[first]) < 0) {
-		        swap(first, middle);
-		    }
-		    if (studentComparator.compare(students[last], students[first]) < 0) {
-		        swap(first, last);
-		    }
-		    if (studentComparator.compare(students[last], students[middle]) < 0) {
-		        swap(middle, last);
-		    }
+	      // order the first, middle, and last elements under the current comparator
+	      if (studentComparator.compare(students[middle], students[first]) < 0) {
+	          swap(first, middle);
+	      }
+	      if (studentComparator.compare(students[last], students[first]) < 0) {
+	          swap(first, last);
+	      }
+	      if (studentComparator.compare(students[last], students[middle]) < 0) {
+	          swap(middle, last);
+	      }
 
-		    // move median (currently at middle) to last - 1 for partition
-		    swap(middle, last - 1);
-		}
+	      // move the median (currently at middle) to the last position for partitioning
+	      swap(middle, last);
+	  }
 	  
 
 
   
 
-	@Override
-	public void sort() {
-	    if (first >= last) return;
+	  @Override
+	  public void sort() {
+	      if (students.length <= 1) return;
+	      quickSortRec(0, students.length - 1);
+	  }
 
-	    int localFirst = first;
-	    int localLast  = last;
+	  // ---- private helpers ----
 
-	    if (localLast - localFirst + 1 >= 3) {
-	        medianOfThree(localFirst, localLast);
-	        Student pivot = students[localLast - 1];     // median moved here
+	  private void quickSortRec(int low, int high) {
+	      if (low >= high) return;
 
-	        int i = localFirst;
-	        int j = localLast - 2;
+	      // Place a good pivot at the end using median-of-three
+	      medianOfThree(low, high);
 
-	        while (true) {
-	            while (++i <= localLast - 2 &&
-	                   studentComparator.compare(students[i], pivot) < 0) { /* advance i */ }
+	      int p = partition(low, high); // pivot placed at index p
+	      quickSortRec(low, p - 1);
+	      quickSortRec(p + 1, high);
+	  }
 
-	            while (--j >= localFirst &&
-	                   studentComparator.compare(students[j], pivot) > 0) { /* advance j */ }
-
-	            if (i >= j) break;
-	            swap(i, j);
-	        }
-
-	        swap(i, localLast - 1); // restore pivot to its final place
-
-	        // recurse left
-	        first = localFirst;
-	        last  = i - 1;
-	        sort();
-
-	        // recurse right
-	        first = i + 1;
-	        last  = localLast;
-	        sort();
-
-	        // restore fields
-	        first = localFirst;
-	        last  = localLast;
-	    } else {
-	        // small array of size 2: order under the current comparator
-	        if (localFirst < localLast &&
-	            studentComparator.compare(students[localLast], students[localFirst]) < 0) {
-	            swap(localFirst, localLast);
-	        }
-	    }
-	}
+	  /**
+	   * Partition 
+	   */
+	  private int partition(int low, int high) {
+	      Student pivot = students[high];
+	      int i = low - 1;
+	      for (int j = low; j < high; j++) {
+	          // Put items "less than or equal to" pivot (under current comparator) on the left
+	          if (studentComparator.compare(students[j], pivot) <= 0) {
+	              i++;
+	              swap(i, j);
+	          }
+	      }
+	      swap(i + 1, high); // final pivot spot
+	      return i + 1;
+	  }
 
 	
 }

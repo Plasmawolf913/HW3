@@ -78,7 +78,7 @@ public class StudentScanner {
       double medianGpa = sorter.getMedian().getGpa();
 
       // Pass B: Order 1 (by credits asc, tie GPA desc)
-      // Make a new sorter to avoid in-place side-effects OR reuse but re-copy students yourself.
+      // make a new sorter to avoid errors
       sorter = switch (sortingAlgorithm) {
           case SelectionSort -> new SelectionSorter(students);
           case InsertionSort -> new InsertionSorter(students);
@@ -121,14 +121,24 @@ public class StudentScanner {
     return "Median Student: " + medianStudent.toString();
   }
 
+  /**
+   * getter for the algorithm chosen
+   * @return which algorithm was chosen
+   */
   public Object getAlgorithm() {
 	return sortingAlgorithm;
   }
-
+/**
+ * getter for the students size
+ * @return size of students array
+ */
   public Object getSize() {
 	return students.length;
   }
-
+/**
+ * getter for time of scan
+ * @return time it took for scan to complete
+ */
   public Object getScanTime() {
 	return scanTime;
   }

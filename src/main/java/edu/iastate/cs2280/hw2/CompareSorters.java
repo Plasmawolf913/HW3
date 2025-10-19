@@ -51,7 +51,8 @@ public class CompareSorters {
 	    
     	System.out.println("Trial " + trialNum + ": " + choice);
 
-	    
+    	
+	    //Based on the user's choice, generate random students and sort, or pull from a file, or quit
 	    switch(choice) {
 	    	case 1:
 	    		
@@ -60,6 +61,7 @@ public class CompareSorters {
 	    		Random rand = new Random();
 	    		Student[] randomStudents = generateRandomStudents(numStudents, rand);
 	    		
+	    		//making scanners
 	    		StudentScanner[] randomScanners = {
 	    		        new StudentScanner(randomStudents, Algorithm.SelectionSort),
 	    		        new StudentScanner(randomStudents, Algorithm.InsertionSort),
@@ -67,13 +69,15 @@ public class CompareSorters {
 	    		        new StudentScanner(randomStudents, Algorithm.MergeSort)
 	    		    };
 	    		
+	    		//scan them
 	    		for (StudentScanner s : randomScanners) {
 	    			s.scan();
 	    		}
 
-    		    // Find median student
+    		    // find median student
     		    Student randomMedian = randomScanners[0].getMedianStudent();
     		    
+    		    //use helper method to display results
     		    displayResults(randomScanners, randomMedian);
 
     		
@@ -96,6 +100,7 @@ public class CompareSorters {
 	    		
 				Student[] fileStudents;
 				
+				//catch errors when reading files
 				try {
 					fileStudents = readStudentsFromFile(fileName);
 				} catch (FileNotFoundException e) {
@@ -106,7 +111,7 @@ public class CompareSorters {
 				    return;
 				} 
 				
-	    		
+	    		//set up scanners
 	    		StudentScanner[] fileScanners = {
 	    		        new StudentScanner(fileStudents, Algorithm.SelectionSort),
 	    		        new StudentScanner(fileStudents, Algorithm.InsertionSort),
@@ -114,12 +119,14 @@ public class CompareSorters {
 	    		        new StudentScanner(fileStudents, Algorithm.MergeSort)
 	    		    };
 	    		
+	    		//call scan method for all scanners
 	    		for (StudentScanner s : fileScanners) {
 	    			s.scan();
 	    		}
 	    		
 	    		Student fileMedian = fileScanners[0].getMedianStudent();
     		    
+	    		//use helper method to display the table
     		    displayResults(fileScanners, fileMedian);
 
     		
@@ -138,6 +145,7 @@ public class CompareSorters {
 	    
 	    }
 	    
+	    //re run the program catching exceptions
 	    System.out.println("Would you like to re run the program or quit? (r or q)");
 	    try {
 	    	choiceTwo = scan.next();

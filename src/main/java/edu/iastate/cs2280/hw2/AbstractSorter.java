@@ -56,24 +56,25 @@ public abstract class AbstractSorter {
    */
   public void setComparator(int order) throws IllegalArgumentException {
 	  
-	  switch (order) {
-      case 0: // Order 0 (by GPA desc, tie credits desc)
-          studentComparator = (a, b) -> {
-              int c = Double.compare(b.getGpa(), a.getGpa());          
-              if (c != 0) return c;
-              return Integer.compare(b.getCreditsTaken(), a.getCreditsTaken()); 
-          };
-          break;
-      case 1: // Order 1 (by credits asc, tie GPA desc)
-          studentComparator = (a, b) -> {
-              int c = Integer.compare(a.getCreditsTaken(), b.getCreditsTaken()); 
-              if (c != 0) return c;
-              return Double.compare(b.getGpa(), a.getGpa());                      
-          };
-          break;
-      default:
-          throw new IllegalArgumentException("Unknown order: " + order);
-  }
+	if (order == 0) {
+	        // GPA desc, then credits desc
+
+		  studentComparator = (a, b) -> {
+	            int c = Double.compare(b.getGpa(), a.getGpa());          // desc GPA
+	            if (c != 0) return c;
+	            return Integer.compare(b.getCreditsTaken(), a.getCreditsTaken()); // desc credits
+	        };
+    } else if (order == 1) {
+        // Credits asc, then GPA desc
+
+    	studentComparator = (a, b) -> {
+            int c = Integer.compare(a.getCreditsTaken(), b.getCreditsTaken()); // asc credits
+            if (c != 0) return c;
+            return Double.compare(b.getGpa(), a.getGpa());                      // desc GPA
+        };
+    } else {
+        throw new IllegalArgumentException("order must be 0 or 1");
+    }
   }
 
   /**
@@ -88,6 +89,9 @@ public abstract class AbstractSorter {
    * @return The median student.
    */
   public Student getMedian() {
+	  if (students == null || students.length == 0) {
+	        return null; 
+	    }
 	  return students[students.length/2];
   }
 

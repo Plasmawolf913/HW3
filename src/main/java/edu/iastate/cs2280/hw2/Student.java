@@ -84,6 +84,7 @@ public class Student implements Comparable<Student> {
    */
   @Override
   public int compareTo(Student other) {
+	  // this is the default implementation of it, studentcomparator outlines specific implementations
 	  if (this.gpa != other.gpa) {
 	        return Double.compare(other.gpa, this.gpa);
 	    }
