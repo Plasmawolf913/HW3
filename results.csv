@@ -1,0 +1,6 @@
+algorithm,size,time(ns)
+SelectionSort,5,1024200
+InsertionSort,5,18499
+QuickSort,5,23401
+MergeSort,5,26800
+Median Student,1.05,93

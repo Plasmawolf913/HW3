@@ -298,7 +298,7 @@ public class CompareSorters {
    */
   private static void displayResults(StudentScanner[] scanners, Student medianStudent) {
       System.out.println();
-      System.out.println("algorithm\t\tsize\ttime (ns)");
+      System.out.println("algorithm\t     size\ttime (ns)");
       System.out.println("--------------------------------------------");
 
       // Loop through scanners and print each algorithm’s results
