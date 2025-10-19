@@ -40,9 +40,11 @@ public abstract class AbstractSorter {
 		  throw new IllegalArgumentException("Students must have at least one value");
 	  }
 	  this.students = new Student[students.length];
-	  for(int i = 0; i < students.length; i++) {
-		  this.students[i] = students[i];
-	  }
+	    for (int i = 0; i < students.length; i++) {
+	      this.students[i] = new Student(students[i]);
+	    }
+	    // ensure comparator is never null
+	    setComparator(0);
 	  
   }
 

@@ -47,10 +47,10 @@ public class StudentScanner {
 	  this.students = new Student[students.length];
 	  this.sortingAlgorithm = algo;
 	  
-	  for(int i = 0; i < students.length; i++) {
-		  this.students[i] = students[i];
-	  }
-	  
+	  for (int i = 0; i < students.length; i++) {
+	      // deep copy to avoid aliasing
+	      this.students[i] = new Student(students[i]);
+	    }
 	  
 
   }
@@ -125,21 +125,21 @@ public class StudentScanner {
    * getter for the algorithm chosen
    * @return which algorithm was chosen
    */
-  public Object getAlgorithm() {
+  public Algorithm getAlgorithm() {
 	return sortingAlgorithm;
   }
 /**
  * getter for the students size
  * @return size of students array
  */
-  public Object getSize() {
+  public int getSize() {
 	return students.length;
   }
 /**
  * getter for time of scan
  * @return time it took for scan to complete
  */
-  public Object getScanTime() {
+  public long getScanTime() {
 	return scanTime;
   }
 }
