@@ -37,7 +37,7 @@ public abstract class AbstractSorter {
    */
   protected AbstractSorter(Student[] students) throws IllegalArgumentException {
 	  if(students == null || students.length <= 0) {
-		  throw new IllegalArgumentException("Students must have at least one value");
+		  throw new IllegalArgumentException();
 	  }
 	  this.students = new Student[students.length];
 	    for (int i = 0; i < students.length; i++) {
@@ -75,7 +75,7 @@ public abstract class AbstractSorter {
             return Double.compare(b.getGpa(), a.getGpa());                      // desc GPA
         };
     } else {
-        throw new IllegalArgumentException("order must be 0 or 1");
+        throw new IllegalArgumentException();
     }
   }
 

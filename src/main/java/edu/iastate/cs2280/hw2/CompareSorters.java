@@ -124,10 +124,12 @@ public class CompareSorters {
 					fileStudents = readStudentsFromFile(fileName);
 				} catch (FileNotFoundException e) {
 					System.out.println("File not found: " + fileName);
-				    return; // stop here; don't proceed with null
+					trialNum++;
+				    continue; // stop here; don't proceed with null
 				} catch (InputMismatchException e) {
 					System.out.println("File format error: " + e.getMessage());
-				    return;
+				    trialNum++;
+					continue;
 				} 
 				
 	    		//set up scanners

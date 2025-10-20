@@ -41,7 +41,7 @@ public class StudentScanner {
    */
   public StudentScanner(Student[] students, Algorithm algo) {
 	  if(students == null || students.length < 1) {
-		  throw new IllegalArgumentException("Student array must have at least 1 value");
+		  throw new IllegalArgumentException();
 	  }
 	  
 	  this.students = new Student[students.length];
