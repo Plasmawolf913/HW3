@@ -48,11 +48,12 @@ public class CompareSorters {
 	    
 	    
     	System.out.println("Trial " + trialNum + ": ");
-    	try {
-        	choice = scan.nextInt();
-        }catch(Exception e) {
+    	
+        choice = scan.nextInt();
+        if(choice > 3 || choice < 1) {
+        	System.out.println("Invalid choice. Please enter 1, 2, or 3.");
         	trialNum++;
-        	System.out.println("Please enter a value 1-3");
+        	continue;
         }
 
     	
@@ -161,7 +162,8 @@ public class CompareSorters {
 	    		break;
 	    	default:
 	    		trialNum++;
-	    		System.out.println("Please input a number 1-3");
+	    		break;
+//	    		System.out.println("Please input a number 1-3");
 	    
 	    }
 	    
