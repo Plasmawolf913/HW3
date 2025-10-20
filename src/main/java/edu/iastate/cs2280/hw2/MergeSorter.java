@@ -25,25 +25,7 @@ public class MergeSorter extends AbstractSorter {
 	 */
 	@Override
 	public void sort() {
-	    if (students == null || students.length < 2) return;
 
-	    aux = new Student[students.length];
-
-	    
-	    for (int width = 1; width < students.length; width <<= 1) {
-	        for (int lo = 0; lo < students.length - width; lo += (width << 1)) {
-	            int mid = lo + width - 1;
-	            int hi  = Math.min(lo + (width << 1) - 1, students.length - 1);
-
-	            // skip if boundary already in order under the CURRENT comparator
-	            if (studentComparator.compare(students[mid], students[mid + 1]) <= 0) continue;
-
-	            merge(lo, mid, hi);
-	        }
-	    }
-
-	    aux = null; //free it like c
-	    
 	    mergeSortRec(0, students.length - 1);
 	}
 
