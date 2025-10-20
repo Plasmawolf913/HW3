@@ -43,6 +43,8 @@ public class MergeSorter extends AbstractSorter {
 	    }
 
 	    aux = null; //free it like c
+	    
+	    mergeSortRec(0, students.length - 1);
 	}
 
 	/**
@@ -51,27 +53,45 @@ public class MergeSorter extends AbstractSorter {
 	 * @param mid
 	 * @param hi
 	 */
-	private void merge(int lo, int mid, int hi) {
-	    // copy to aux
-	    for (int k = lo; k <= hi; k++) aux[k] = students[k];
+	  private void merge(int first, int mid, int last) {
+	    Student[] temp = new Student[last - first + 1];
+	    int left = first, right = mid + 1, k = 0;
 
-	    int i = lo;       // pointer in left half
-	    int j = mid + 1;  // pointer in right half
-
-	    for (int k = lo; k <= hi; k++) {
-	        if (i > mid) {
-	            students[k] = aux[j++];
-	        } else if (j > hi) {
-	            students[k] = aux[i++];
-	        } else if (studentComparator.compare(aux[j], aux[i]) < 0) {
-	            // Right item strictly "smaller" by comparator so take from right
-	            students[k] = aux[j++];
-	        } else {
-	            // Left item <= right so take from left
-	            students[k] = aux[i++];
-	        }
+	    // merge while both halves have elements
+	    while (left <= mid && right <= last) {
+	      if (studentComparator.compare(students[left], students[right]) <= 0) {
+	        temp[k++] = students[left++];
+	      } else {
+	        temp[k++] = students[right++];
+	      }
 	    }
-	}
+
+	    // copy remaining from left
+	    while (left <= mid) temp[k++] = students[left++];
+
+	    // copy remaining from right
+	    while (right <= last) temp[k++] = students[right++];
+
+	    // copy merged result back into students
+	    System.arraycopy(temp, 0, students, first, temp.length);
+	  }
+
+	
+	/**
+	   * Recursively divides and sorts the subarray students[first..last].
+	   */
+	  private void mergeSortRec(int first, int last) {
+	    if (first >= last) return;
+
+	    int mid = (first + last) / 2;
+
+	    // recursively sort both halves
+	    mergeSortRec(first, mid);
+	    mergeSortRec(mid + 1, last);
+
+	    // merge the sorted halves
+	    merge(first, mid, last);
+	  }
 
 }
 
