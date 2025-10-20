@@ -5,10 +5,7 @@ package edu.iastate.cs2280.hw2;
 
 public class MergeSorter extends AbstractSorter {
 
-	/**
-	 * secondary array to make sorting easier
-	 */
-	private Student[] aux;
+
 	/**
 	 * Implements mergesort by extending abstractsorter
 	 * @param students array
@@ -25,7 +22,6 @@ public class MergeSorter extends AbstractSorter {
 	 */
 	@Override
 	public void sort() {
-
 	    mergeSortRec(0, students.length - 1);
 	}
 

@@ -61,11 +61,11 @@ public abstract class AbstractSorter {
 	if (order == 0) {
 	        // GPA desc, then credits desc
 
-		  studentComparator = (a, b) -> {
-	            int c = Double.compare(b.getGpa(), a.getGpa());          // desc GPA
-	            if (c != 0) return c;
-	            return Integer.compare(b.getCreditsTaken(), a.getCreditsTaken()); // desc credits
-	        };
+	  studentComparator = (a, b) -> {
+            int c = Double.compare(b.getGpa(), a.getGpa());          // desc GPA
+            if (c != 0) return c;
+            return Integer.compare(b.getCreditsTaken(), a.getCreditsTaken()); // desc credits
+        };
     } else if (order == 1) {
         // Credits asc, then GPA desc
 

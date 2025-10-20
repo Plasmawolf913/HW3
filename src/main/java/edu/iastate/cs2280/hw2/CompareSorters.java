@@ -38,60 +38,78 @@ public class CompareSorters {
     boolean quit = false;
     String choiceTwo = null;
     
+    System.out.println();
+	System.out.println("-----------------------------------------------------------");
+	System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
+	
     while(!quit) {
-    	System.out.println();
-    	System.out.println("-----------------------------------------------------------");
-    	System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
+    	
     
-	    try {
-	    	choice = scan.nextInt();
-	    }catch(Exception e) {
-	    	System.out.println("Please enter a value 1-3");
-	    }
 	    
-    	System.out.println("Trial " + trialNum + ": " + choice);
+	    
+    	System.out.println("Trial " + trialNum + ": ");
+    	try {
+        	choice = scan.nextInt();
+        }catch(Exception e) {
+        	trialNum++;
+        	System.out.println("Please enter a value 1-3");
+        }
 
     	
 	    //Based on the user's choice, generate random students and sort, or pull from a file, or quit
 	    switch(choice) {
 	    	case 1:
+	    		try {
+		    		System.out.println("Enter the number of students to generate:");
+		    		
+		    		int numStudents = scan.nextInt();
+		    		if(numStudents < 1) {
+		    			System.out.println("Students cannot be less than 1");
+		    			trialNum++;
+		    			continue;
+		    		}
+		    		
+		    		Random rand = new Random();
+		    		
+		    		
+		    		Student[] randomStudents = generateRandomStudents(numStudents, rand);
+		    		
+		    	
+		    		//making scanners
+		    		StudentScanner[] randomScanners = {
+		    		        new StudentScanner(randomStudents, Algorithm.SelectionSort),
+		    		        new StudentScanner(randomStudents, Algorithm.InsertionSort),
+		    		        new StudentScanner(randomStudents, Algorithm.QuickSort),
+		    		        new StudentScanner(randomStudents, Algorithm.MergeSort)
+		    		    };
+		    		
+		    		//scan them
+		    		for (StudentScanner s : randomScanners) {
+		    			s.scan();
+		    		}
+	
+	    		    // find median student
+	    		    Student randomMedian = randomScanners[0].getMedianStudent();
+	    		    
+	    		    //use helper method to display results
+	    		    displayResults(randomScanners, randomMedian);
+	
 	    		
-	    		System.out.println("Enter the number of students to generate:");
-	    		int numStudents = scan.nextInt();
-	    		Random rand = new Random();
-	    		Student[] randomStudents = generateRandomStudents(numStudents, rand);
-	    		
-	    		//making scanners
-	    		StudentScanner[] randomScanners = {
-	    		        new StudentScanner(randomStudents, Algorithm.SelectionSort),
-	    		        new StudentScanner(randomStudents, Algorithm.InsertionSort),
-	    		        new StudentScanner(randomStudents, Algorithm.QuickSort),
-	    		        new StudentScanner(randomStudents, Algorithm.MergeSort)
-	    		    };
-	    		
-	    		//scan them
-	    		for (StudentScanner s : randomScanners) {
-	    			s.scan();
+	    		    System.out.print("Export results to CSV? (y/n): ");
+	    		    String randomCsvChoice = scan.next();
+	
+	    		    if (randomCsvChoice.equals("y")) {
+	    		    	handleExportOption(scan, randomScanners); 
+	    		    }
+	    		    trialNum++;
+		    		break;
+	    		}catch(InputMismatchException e) {
+	    			System.out.println("Invalid number. Please enter an integer");
+	    			scan.nextLine();
 	    		}
-
-    		    // find median student
-    		    Student randomMedian = randomScanners[0].getMedianStudent();
-    		    
-    		    //use helper method to display results
-    		    displayResults(randomScanners, randomMedian);
-
-    		
-    		    System.out.print("Export results to CSV? (y/n): ");
-    		    String randomCsvChoice = scan.next();
-
-    		    if (randomCsvChoice.equals("y")) {
-    		    	handleExportOption(scan, randomScanners); 
-    		    }
+	    		trialNum++;
 	    		break;
-	    		
-	    		
-	    		
-	    		
+	    
 	    		
 	    	case 2:
 	    		System.out.print("File name: ");
@@ -136,34 +154,18 @@ public class CompareSorters {
     		    if (fileCsvChoice.equalsIgnoreCase("y")) {
     		    	handleExportOption(scan, fileScanners); 
     		    }
+    		    trialNum++;
 	    		break;
 	    	case 3:
 	    		quit = true;
 	    		break;
 	    	default:
+	    		trialNum++;
 	    		System.out.println("Please input a number 1-3");
 	    
 	    }
 	    
-	    //re run the program catching exceptions
-	    System.out.println("Would you like to re run the program or quit? (r or q)");
-	    try {
-	    	choiceTwo = scan.next();
-	    }catch(Exception e) {
-	    	System.out.println("Please enter a valid value");
-	    }
-	    switch(choiceTwo) {
-	    	case "r":
-	    		trialNum++;
-	    		continue;
-	    		
-	    	case "q":
-	    		quit = true;
-	    		break;
-	    	default:
-	    		quit = true;
-	    		break;
-	    }
+
     }
     
     
@@ -247,8 +249,7 @@ public class CompareSorters {
    */
   private static Student[] readStudentsFromFile(String filename) throws FileNotFoundException, InputMismatchException {
 	  
-	  int size = 0;
-	  Student[] students = null;
+
 	  
 	  File f = new File(filename);
 	  if (!f.exists()) {

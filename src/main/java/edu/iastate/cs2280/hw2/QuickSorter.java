@@ -10,9 +10,6 @@ package edu.iastate.cs2280.hw2;
  */
 public class QuickSorter extends AbstractSorter {
 
-	
-      private int first;
-      private int last;
       /**
        * 
        * @param students array
@@ -20,8 +17,7 @@ public class QuickSorter extends AbstractSorter {
        */
 	  protected QuickSorter(Student[] students) throws IllegalArgumentException {
 			super(students);
-			first = 0;
-			last = students.length-1;
+
 		}
 
 	  /**
