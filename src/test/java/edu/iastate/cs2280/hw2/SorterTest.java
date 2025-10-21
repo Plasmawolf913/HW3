@@ -33,13 +33,13 @@ public class SorterTest {
             s(2.9, 30)
         };
 
-        // order 0 = GPA ↓ then credits ↓
+        // order 0 = GPA  then credits 
         SelectionSorter sel0 = new SelectionSorter(data.clone());
         sel0.setComparator(0);
         sel0.sort();
         assertTrue(isSorted(sel0, 0));
 
-        // order 1 = credits ↑ then GPA ↓
+        // order 1 = credits  then GPA 
         SelectionSorter sel1 = new SelectionSorter(data.clone());
         sel1.setComparator(1);
         sel1.sort();
