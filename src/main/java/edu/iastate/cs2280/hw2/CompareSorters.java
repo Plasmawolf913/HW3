@@ -240,7 +240,7 @@ public class CompareSorters {
 	                median.getGpa(),
 	                median.getCreditsTaken());
 
-	        System.out.printf("Data exported successfully to %s%n", filename);
+	        System.out.printf("Data exported successfully to %s%n\n", filename);
 
 	    } catch(Exception e) {
 	    	System.out.printf("Error: Could not create or write to file %s%n", filename);
