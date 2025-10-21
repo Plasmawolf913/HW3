@@ -11,7 +11,7 @@ public class InsertionSorter extends AbstractSorter {
  * @param students array
  * @throws IllegalArgumentException
  */
-	protected InsertionSorter(Student[] students) throws IllegalArgumentException {
+	public InsertionSorter(Student[] students) throws IllegalArgumentException {
 		super(students);
 		
 	}

@@ -15,7 +15,7 @@ public class QuickSorter extends AbstractSorter {
        * @param students array
        * @throws IllegalArgumentException
        */
-	  protected QuickSorter(Student[] students) throws IllegalArgumentException {
+	  public QuickSorter(Student[] students) throws IllegalArgumentException {
 			super(students);
 
 		}

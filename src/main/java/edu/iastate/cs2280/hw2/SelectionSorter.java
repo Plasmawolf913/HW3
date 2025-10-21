@@ -12,7 +12,7 @@ public class SelectionSorter extends AbstractSorter{
  * @param students array
  * @throws IllegalArgumentException if argument is wrong
  */
-	protected SelectionSorter(Student[] students) throws IllegalArgumentException {
+	public SelectionSorter(Student[] students) throws IllegalArgumentException {
 		super(students);
 		
 	}

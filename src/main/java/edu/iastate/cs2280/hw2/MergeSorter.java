@@ -11,7 +11,7 @@ public class MergeSorter extends AbstractSorter {
 	 * @param students array
 	 * @throws IllegalArgumentException
 	 */
-	protected MergeSorter(Student[] students) throws IllegalArgumentException {
+	public MergeSorter(Student[] students) throws IllegalArgumentException {
 		super(students);
 		
 	}
