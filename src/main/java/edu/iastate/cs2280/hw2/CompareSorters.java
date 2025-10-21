@@ -38,8 +38,7 @@ public class CompareSorters {
     boolean quit = false;
     boolean choiceException = false;
     
-    System.out.println();
-	System.out.println("-----------------------------------------------------------");
+
 	System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
 	
 	//main simulation loop
@@ -47,15 +46,16 @@ public class CompareSorters {
     while(!quit) {
     	
     
-    	System.out.println("Trial " + trialNum + ": ");
+    	System.out.print("Trial " + trialNum + ": ");
     	
     	
-	        
+    		choice = 0;
 	        //catch inputmismatches like strings
     		try{
     			choice = scan.nextInt();
     		}catch(InputMismatchException e) {
     			System.out.println("Invalid number. Please enter an integer");
+    			
     			choiceException = true;
     			scan.nextLine();
     		}
@@ -66,7 +66,7 @@ public class CompareSorters {
 	    //random generation
 	    	case 1:
 	    		try {
-		    		System.out.println("Enter number of random students: ");
+		    		System.out.print("Enter number of random students: ");
 		    		
 		    		//make sure numstudents is not an illegal number
 		    		int numStudents = scan.nextInt();
@@ -114,7 +114,7 @@ public class CompareSorters {
 		    		
 		    		//make sure to catch strings
 	    		}catch(InputMismatchException e) {
-	    			System.out.println("Invalid number. Please enter an integer");
+	    			System.out.println("Invalid number. Please enter an integer.");
 	    			scan.nextLine();
 	    		}
 	    		//if the try fails, still increase trial number
@@ -185,6 +185,7 @@ public class CompareSorters {
 	    	default:
 	    		//if it was a string input do not print error message twice
 	    		if(choiceException) {
+	    			choiceException = false;
 	    			trialNum++;
 		    		break;
 	    		}
@@ -318,12 +319,14 @@ public class CompareSorters {
 
 	            list.add(new Student(gpa, credits));
 	        }
+	        sc.close();
 	    }
 
 	    if (list.isEmpty()) {
 	        throw new IllegalArgumentException("Student array must have at least 1 value.");
 	    }
 	    //return the list as an array of students
+	    
 	    return list.toArray(new Student[0]);
   }
   
@@ -336,18 +339,18 @@ public class CompareSorters {
    */
   private static void displayResults(StudentScanner[] scanners, Student medianStudent) {
       System.out.println();
-      System.out.println("algorithm\t     size\ttime (ns)");
-      System.out.println("--------------------------------------------");
+      System.out.println("algorithm      size   time (ns)");
+      System.out.println("------------------------------------");
 
       // Loop through scanners and print each algorithm’s results
       for (StudentScanner s : scanners) {
-          System.out.printf("%-15s %8d %12d%n",
+          System.out.printf("%-13s%6d   %-11d%n",
                   s.getAlgorithm(),
                   s.getSize(),
                   s.getScanTime());
       }
 
-      System.out.println("--------------------------------------------");
+      System.out.println("------------------------------------");
       System.out.println();
 
       // Median student info

@@ -50,7 +50,9 @@ public class QuickSorter extends AbstractSorter {
 
 
   
-
+	  /**
+	   * Overrides abstractsorter's sort method to implement quick sort
+	   */
 	  @Override
 	  public void sort() {
 	      if (students.length <= 1) return;
@@ -59,6 +61,11 @@ public class QuickSorter extends AbstractSorter {
 
 	  // ---- private helpers ----
 
+	  /**
+	   * recursive quick sort implementation
+	   * @param low
+	   * @param high
+	   */
 	  private void quickSortRec(int low, int high) {
 	      if (low >= high) return;
 
@@ -71,7 +78,7 @@ public class QuickSorter extends AbstractSorter {
 	  }
 
 	  /**
-	   * Partition 
+	   * Partition the array into low and high sections
 	   */
 	  private int partition(int low, int high) {
 	      Student pivot = students[high];
