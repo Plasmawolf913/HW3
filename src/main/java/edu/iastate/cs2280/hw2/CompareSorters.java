@@ -36,42 +36,47 @@ public class CompareSorters {
     int choice = 0;
     int trialNum = 1;
     boolean quit = false;
-    String choiceTwo = null;
+    boolean choiceException = false;
     
     System.out.println();
 	System.out.println("-----------------------------------------------------------");
 	System.out.println("keys:  1 (random student data)  2 (file input)  3 (exit)");
 	
+	//main simulation loop
+	
     while(!quit) {
     	
     
-	    
-	    
     	System.out.println("Trial " + trialNum + ": ");
     	
-        choice = scan.nextInt();
-        if(choice > 3 || choice < 1) {
-        	System.out.println("Invalid choice. Please enter 1, 2, or 3.");
-        	trialNum++;
-        	continue;
-        }
-
     	
+	        
+	        //catch inputmismatches like strings
+    		try{
+    			choice = scan.nextInt();
+    		}catch(InputMismatchException e) {
+    			System.out.println("Invalid number. Please enter an integer");
+    			choiceException = true;
+    			scan.nextLine();
+    		}
+
+	
 	    //Based on the user's choice, generate random students and sort, or pull from a file, or quit
 	    switch(choice) {
+	    //random generation
 	    	case 1:
 	    		try {
-		    		System.out.println("Enter the number of students to generate:");
+		    		System.out.println("Enter number of random students: ");
 		    		
+		    		//make sure numstudents is not an illegal number
 		    		int numStudents = scan.nextInt();
 		    		if(numStudents < 1) {
-		    			System.out.println("Students cannot be less than 1");
+		    			System.out.println("Number of students must be at least 1.");
 		    			trialNum++;
 		    			continue;
 		    		}
 		    		
 		    		Random rand = new Random();
-		    		
 		    		
 		    		Student[] randomStudents = generateRandomStudents(numStudents, rand);
 		    		
@@ -102,16 +107,23 @@ public class CompareSorters {
 	    		    if (randomCsvChoice.equals("y")) {
 	    		    	handleExportOption(scan, randomScanners); 
 	    		    }
+	    		    
+	    		    //end trial and re run
 	    		    trialNum++;
 		    		break;
+		    		
+		    		//make sure to catch strings
 	    		}catch(InputMismatchException e) {
 	    			System.out.println("Invalid number. Please enter an integer");
 	    			scan.nextLine();
 	    		}
+	    		//if the try fails, still increase trial number
 	    		trialNum++;
 	    		break;
 	    
 	    		
+	    		
+	    	//file reading
 	    	case 2:
 	    		System.out.print("File name: ");
 	    		String fileName = scan.next().trim();   // single token is safest for filenames
@@ -123,14 +135,18 @@ public class CompareSorters {
 				try {
 					fileStudents = readStudentsFromFile(fileName);
 				} catch (FileNotFoundException e) {
-					System.out.println("File not found: " + fileName);
+					System.out.println("Error: File not found: " + fileName);
 					trialNum++;
 				    continue; // stop here; don't proceed with null
 				} catch (InputMismatchException e) {
-					System.out.println("File format error: " + e.getMessage());
+					System.out.println("Error: Input file format is incorrect. " + e.getMessage());
 				    trialNum++;
 					continue;
-				} 
+				} catch(IllegalArgumentException e) {
+					System.out.println("Error: Input file format is incorrect. File is empty or contains no valid student data.");
+					trialNum++;
+					continue;
+				}
 				
 	    		//set up scanners
 	    		StudentScanner[] fileScanners = {
@@ -145,6 +161,7 @@ public class CompareSorters {
 	    			s.scan();
 	    		}
 	    		
+	    		//find median student from one of the scanners
 	    		Student fileMedian = fileScanners[0].getMedianStudent();
     		    
 	    		//use helper method to display the table
@@ -154,30 +171,39 @@ public class CompareSorters {
     		    System.out.print("Export results to CSV? (y/n): ");
     		    String fileCsvChoice = scan.next();
 
+    		    //possibly export to a file
     		    if (fileCsvChoice.equalsIgnoreCase("y")) {
     		    	handleExportOption(scan, fileScanners); 
     		    }
+    		    
     		    trialNum++;
 	    		break;
 	    	case 3:
 	    		quit = true;
 	    		break;
+	    	//default case - re run and increment trial number
 	    	default:
+	    		//if it was a string input do not print error message twice
+	    		if(choiceException) {
+	    			trialNum++;
+		    		break;
+	    		}
+	    		else if((choice > 3 || choice < 1)) {
+		        	System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+		        	trialNum++;
+		        	break;
+		        }
 	    		trialNum++;
 	    		break;
-//	    		System.out.println("Please input a number 1-3");
 	    
 	    }
 	    
-
     }
     
-    
-
-    System.out.println("Exiting program.");
-    
+    //program exit
+    System.out.println("Exiting program.");   
     scan.close();
-    System.exit(0);
+    return;
    
   }
 
@@ -231,9 +257,10 @@ public class CompareSorters {
    */
   public static Student[] generateRandomStudents(int numStudents, Random rand) {
 	  if(numStudents < 1) {
-		  throw new IllegalArgumentException("NumStudents cannot be less than 1");
+		  throw new IllegalArgumentException();
 	  }
 	  
+	  //create an array of new students with the correct parameters for GPA and creditsTaken
 	  Student[] students = new Student[numStudents];
 	  for(int i = 0; i < numStudents; i++) {
 		  students[i] = new Student(rand.nextDouble()*4, rand.nextInt(131));
@@ -253,8 +280,6 @@ public class CompareSorters {
    */
   private static Student[] readStudentsFromFile(String filename) throws FileNotFoundException, InputMismatchException {
 	  
-
-	  
 	  File f = new File(filename);
 	  if (!f.exists()) {
 	        throw new FileNotFoundException("File not found: " + filename);
@@ -262,7 +287,8 @@ public class CompareSorters {
 	  
 	  ArrayList<Student> list = new ArrayList<>();
 
-	    
+	  //add students to the arraylist, catching all possible errors in the file
+	  //(input mismatch, numberformat, wrong file type
 	  try (Scanner sc = new Scanner(f)) {
 	        int lineNo = 0;
 	        while (sc.hasNextLine()) {
@@ -271,17 +297,23 @@ public class CompareSorters {
 	            if (line.isEmpty() || line.startsWith("#")) continue; // allow blanks/comments
 
 	            String[] parts = line.split("\\s+");
-	            if (parts.length < 2) {
-	                throw new InputMismatchException("Line " + lineNo + " must contain GPA and credits");
-	            }
+//	            if (parts.length < 2) {
+//	                throw new InputMismatchException("Line " + lineNo + " must contain GPA and credits");
+//	            }
 
 	            double gpa;
 	            int credits;
 	            try {
 	                gpa = Double.parseDouble(parts[0]);
-	                credits = Integer.parseInt(parts[1]);
+	                
 	            } catch (NumberFormatException nfe) {
-	                throw new InputMismatchException("Invalid number on line " + lineNo + ": " + nfe.getMessage());
+	                throw new InputMismatchException("File format error: Invalid GPA format. Expected a double.");
+	            }
+	            
+	            try {
+	            	credits = Integer.parseInt(parts[1]);
+	            }catch(NumberFormatException nfe) {
+	            	throw new InputMismatchException("File format error: Invalid credits format. Expected an integer.");
 	            }
 
 	            list.add(new Student(gpa, credits));
@@ -289,8 +321,9 @@ public class CompareSorters {
 	    }
 
 	    if (list.isEmpty()) {
-	        throw new IllegalArgumentException("student array must have at least 1 value");
+	        throw new IllegalArgumentException("Student array must have at least 1 value.");
 	    }
+	    //return the list as an array of students
 	    return list.toArray(new Student[0]);
   }
   
@@ -298,7 +331,7 @@ public class CompareSorters {
   
   
   /**
-   * Displays the sorting performance table for all algorithms.
+   * helper method for displaying the sorting performance table for all algorithms.
    * Assumes each StudentScanner object stores algorithm name, input size, and runtime.
    */
   private static void displayResults(StudentScanner[] scanners, Student medianStudent) {
