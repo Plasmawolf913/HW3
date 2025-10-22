@@ -101,11 +101,16 @@ public class CompareSorters {
 	    		    displayResults(randomScanners, randomMedian);
 	
 	    		
-	    		    System.out.print("Export results to CSV? (y/n): ");
-	    		    String randomCsvChoice = scan.next();
+	    		  //catch errors with input
+    		    	System.out.print("Export results to CSV? (y/n): ");
+    		    	String randomCsvChoice = scan.next();
+	    		    
 	
 	    		    if (randomCsvChoice.equals("y")) {
 	    		    	handleExportOption(scan, randomScanners); 
+	    		    }else if(!randomCsvChoice.equals("n")) {
+			        	System.out.println("Invalid choice. Please enter y or n");
+			        	scan.nextLine();
 	    		    }
 	    		    
 	    		    //end trial and re run
@@ -167,10 +172,18 @@ public class CompareSorters {
 	    		//use helper method to display the table
     		    displayResults(fileScanners, fileMedian);
 
-    		
+    		    //catch errors with input
     		    System.out.print("Export results to CSV? (y/n): ");
-    		    String fileCsvChoice = scan.next();
+		    	String fileCsvChoice = scan.next();
+    		    
 
+    		    if (fileCsvChoice.equals("y")) {
+    		    	handleExportOption(scan, fileScanners); 
+    		    }else if(!fileCsvChoice.equals("n")) {
+		        	System.out.println("Invalid choice. Please enter y or n");
+		        	scan.nextLine();
+    		    }
+    		    
     		    //possibly export to a file
     		    if (fileCsvChoice.equalsIgnoreCase("y")) {
     		    	handleExportOption(scan, fileScanners); 
@@ -298,6 +311,7 @@ public class CompareSorters {
 	            if (line.isEmpty() || line.startsWith("#")) continue; // allow blanks/comments
 
 	            String[] parts = line.split("\\s+");
+	            //extra caught error
 //	            if (parts.length < 2) {
 //	                throw new InputMismatchException("Line " + lineNo + " must contain GPA and credits");
 //	            }
@@ -337,51 +351,30 @@ public class CompareSorters {
    * helper method for displaying the sorting performance table for all algorithms.
    * Assumes each StudentScanner object stores algorithm name, input size, and runtime.
    */
-//  private static void displayResults(StudentScanner[] scanners, Student medianStudent) {
-//      System.out.println();
-//      System.out.println("algorithm      size   time (ns)");
-//      System.out.println("------------------------------------");
-//
-//      // Loop through scanners and print each algorithm’s results
-//      for (StudentScanner s : scanners) {
-//          System.out.printf("%-13s%6d   %-11d%n",
-//                  s.getAlgorithm(),
-//                  s.getSize(),
-//                  s.getScanTime());
-//      }
-//
-//      System.out.println("------------------------------------");
-//      System.out.println();
-//
-//      // Median student info
-//      System.out.printf("Median Student Profile: (GPA: %.2f, Credits: %d)%n",
-//              medianStudent.getGpa(),
-//              medianStudent.getCreditsTaken());
-//      System.out.println();
-//
-//  }
-//
-//}
   private static void displayResults(StudentScanner[] scanners, Student medianStudent) {
-	    // Print exact header expected by autograder
-	    System.out.println("algorithm size time (ns)");
-	    System.out.println("------------------------------------");
+      System.out.println();
+      System.out.println("algorithm      size   time (ns)");
+      System.out.println("------------------------------------");
 
-	    // Loop through scanners and print each algorithm’s results
-	    for (StudentScanner s : scanners) {
-	        System.out.printf("%s %d %d%n",
-	                s.getAlgorithm(),
-	                s.getSize(),
-	                s.getScanTime());
-	    }
+      // Loop through scanners and print each algorithm’s results
+      for (StudentScanner s : scanners) {
+          System.out.printf("%-15s%-6d %-11d%n"
+,
+                  s.getAlgorithm(),
+                  s.getSize(),
+                  s.getScanTime());
+      }
 
-	    System.out.println("------------------------------------");
-	    System.out.println();
+      System.out.println("------------------------------------");
+      System.out.println();
 
-	    // Median student info
-	    System.out.printf("Median Student Profile: (GPA: %.1f, Credits: %d)%n",
-	            medianStudent.getGpa(),
-	            medianStudent.getCreditsTaken());
-	    System.out.println();
-	}
+      // Median student info
+      System.out.printf("Median Student Profile: (GPA: %.2f, Credits: %d)%n",
+              medianStudent.getGpa(),
+              medianStudent.getCreditsTaken());
+      System.out.println();
+
+  }
+
+
 }
