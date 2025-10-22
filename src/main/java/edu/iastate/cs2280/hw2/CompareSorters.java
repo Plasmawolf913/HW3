@@ -379,7 +379,7 @@ public class CompareSorters {
 	    System.out.println();
 
 	    // Median student info
-	    System.out.printf("Median Student Profile: (GPA: %.2f, Credits: %d)%n",
+	    System.out.printf("Median Student Profile: (GPA: %.1f, Credits: %d)%n",
 	            medianStudent.getGpa(),
 	            medianStudent.getCreditsTaken());
 	    System.out.println();
